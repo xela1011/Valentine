@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Valentine Surprise ❤️</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      /* Valentine gradient background */
+      background: linear-gradient(135deg, #ff4d6d, #ff9a9e, #ffc3a0);
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 20px;
+      animation: float 6s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-110vh); }
+    }
+
+    .box {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      text-align: center;
+      width: 320px;
+      position: relative;
+      z-index: 10;
+    }
+
+    input {
+      padding: 10px;
+      width: 85%;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    #noBtn {
+      background: #333;
+      color: white;
+      position: absolute;
+    }
+
+    #question {
+      display: none;
+    }
+
+    /* Confetti hearts */
+    .burst {
+      position: fixed;
+      font-size: 24px;
+      animation: burst 1.2s ease-out forwards;
+    }
+
+    @keyframes burst {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(2) translateY(-150px); }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <div id="nameBox">
+    <h2>Enter Your Name 💌</h2>
+    <input type="text" id="nameInput" placeholder="Your name">
+    <br>
+    <button onclick="start()">Start</button>
+  </div>
+
+  <div id="question">
+    <h2 id="text"></h2>
+    <button id="yesBtn" onclick="yesClicked()">YES ❤️</button>
+    <button id="noBtn">NO 💔</button>
+  </div>
+
+</div>
+
+<script>
+  let userName = "";
+
+  // Floating hearts background
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (15 + Math.random()*25) + "px";
+    heart.style.animationDuration = (4 + Math.random()*4) + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 6000);
+  }, 300);
+
+  function start() {
+    userName = document.getElementById("nameInput").value;
+
+    if(userName === "") {
+      alert("Enter your name first!");
+      return;
+    }
+
+    document.getElementById("nameBox").style.display = "none";
+    document.getElementById("question").style.display = "block";
+
+    document.getElementById("text").innerHTML =
+      userName + ", will you get your Valentine? 💘";
+  }
+
+  function yesClicked() {
+
+    // Heart burst animation
+    for(let i=0;i<25;i++){
+      const b = document.createElement("div");
+      b.className = "burst";
+      b.innerHTML = "💖";
+      b.style.left = Math.random()*100 + "vw";
+      b.style.top = Math.random()*100 + "vh";
+      document.body.appendChild(b);
+
+      setTimeout(()=>b.remove(),1200);
+    }
+
+    document.querySelector(".box").innerHTML =
+      "<h2>💖 Happy Valentine’s Day 💖</h2>" +
+      "<h3>" + userName + ", you will definitely get your Valentine! 😄</h3>" +
+      "<p>Stay happy & spread love ✨</p>";
+  }
+
+  // NO button runs away
+  const noBtn = document.getElementById("noBtn");
+
+  noBtn.addEventListener("mouseover", () => {
+    const x = Math.random() * 250;
+    const y = Math.random() * 200;
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  });
+
+</script>
+
+</body>
+</html>
