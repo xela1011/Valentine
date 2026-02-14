@@ -1,205 +1,220 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>just enter your name ❤️</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Just enter your name</title>
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Segoe UI, Arial, sans-serif;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: "Poppins", sans-serif;
+}
 
-    body{
-      height:100vh;
-      overflow:hidden;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      transition:1s;
-    }
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  text-align:center;
+  color:white;
+  transition:0.8s;
+}
 
-    /* ---------- PAGE 1 PROFESSIONAL ---------- */
-    .professional{
-      background:linear-gradient(135deg,#0f172a,#1e293b);
-      color:white;
-    }
+/* ---------- SCREENS ---------- */
+.screen{
+  display:none;
+  width:100%;
+  height:100%;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  padding:20px;
+}
 
-    /* ---------- PAGE 2 ROMANTIC ---------- */
-    .romantic{
-      background:linear-gradient(135deg,#ff4d6d,#ff9a9e,#ffc3a0);
-      color:white;
-    }
+.active{ display:flex; }
 
-    .screen{
-      width:100%;
-      height:100%;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      position:relative;
-    }
+/* ---------- PROFESSIONAL PAGE ---------- */
+#start{
+  background: linear-gradient(135deg,#1e3c72,#2a5298);
+}
 
-    /* 🔥 BIG FULLSCREEN TEXT */
-    h1{
-      font-size:8vw;
-      margin-bottom:30px;
-    }
+input{
+  padding:18px;
+  font-size:24px;
+  border-radius:12px;
+  border:none;
+  width:70%;
+  max-width:350px;
+  margin:20px;
+}
 
-    h2{
-      font-size:6vw;
-      margin-bottom:40px;
-    }
+button{
+  padding:18px 40px;
+  font-size:24px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  margin:15px;
+}
 
-    input{
-      font-size:5vw;
-      padding:15px;
-      width:70%;
-      max-width:400px;
-      border-radius:12px;
-      border:none;
-      text-align:center;
-    }
+/* ---------- CAMERA ---------- */
+#camera{
+  background:#111;
+}
 
-    button{
-      font-size:5vw;
-      padding:14px 30px;
-      border:none;
-      border-radius:14px;
-      cursor:pointer;
-      margin:12px;
-    }
+video{
+  width:90%;
+  max-width:420px;
+  border-radius:20px;
+}
 
-    #nextBtn{
-      background:#3b82f6;
-      color:white;
-    }
+/* ---------- VALENTINE PAGE ---------- */
+#question{
+  background:linear-gradient(135deg,#ff6a88,#ff99ac);
+}
 
-    #yesBtn{
-      background:#ff4d6d;
-      color:white;
-    }
+.bigtext{
+  font-size:8vw;
+  font-weight:bold;
+  line-height:1.3;
+}
 
-    #noBtn{
-      background:#222;
-      color:white;
-      position:absolute;
-    }
+#yes{
+  background:#ff2e63;
+  color:white;
+}
 
-    #page2{
-      display:none;
-    }
+#no{
+  background:#444;
+  color:white;
+  position:absolute;
+}
 
-    /* floating effects */
-    .item{
-      position:fixed;
-      font-size:28px;
-      animation:rise 4s linear forwards;
-    }
+/* ---------- CELEBRATION ---------- */
+#celebrate{
+  background:#ff4e50;
+  animation:colorChange 6s infinite;
+}
 
-    @keyframes rise{
-      from{transform:translateY(0);opacity:1;}
-      to{transform:translateY(-120vh);opacity:0;}
-    }
+@keyframes colorChange{
+  0%{background:#ff4e50;}
+  25%{background:#ff6a88;}
+  50%{background:#ff9966;}
+  75%{background:#ff5f6d;}
+  100%{background:#ff4e50;}
+}
 
-  </style>
+#photo{
+  width:250px;
+  border-radius:20px;
+  margin:20px;
+}
+
+/* flowers/fireworks */
+.heart{
+  position:absolute;
+  font-size:30px;
+  animation:float 4s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(100vh);opacity:1}
+  100%{transform:translateY(-10vh);opacity:0}
+}
+</style>
 </head>
 
-<body class="professional">
+<body>
 
-<!-- PAGE 1 -->
-<div class="screen" id="page1">
-  <h1>just enter your name 💼</h1>
-  <input id="nameInput" placeholder="Enter your name">
-  <br>
-  <button id="nextBtn" onclick="goNext()">Next</button>
+<!-- -------- PAGE 1 -------- -->
+<div id="start" class="screen active">
+  <h1 class="bigtext">Enter Your Name</h1>
+  <input id="nameInput" placeholder="Your name"/>
+  <button onclick="goCamera()">Next ➜</button>
 </div>
 
-<!-- PAGE 2 -->
-<div class="screen" id="page2">
-  <h2 id="questionText"></h2>
-  <button id="yesBtn" onclick="yesClicked()">YES ❤️</button>
-  <button id="noBtn">NO 💔</button>
+<!-- -------- PAGE 2 CAMERA -------- -->
+<div id="camera" class="screen">
+  <video id="video" autoplay></video>
+  <button onclick="takePhoto()">Take Photo 📸</button>
 </div>
 
+<!-- -------- PAGE 3 QUESTION -------- -->
+<div id="question" class="screen">
+  <h1 id="questionText" class="bigtext"></h1>
+  <div style="margin-top:40px;">
+    <button id="yes" onclick="celebrate()">YES ❤️</button>
+    <button id="no" onclick="moveNo()">NO</button>
+  </div>
+</div>
+
+<!-- -------- PAGE 4 CELEBRATE -------- -->
+<div id="celebrate" class="screen">
+  <h1 class="bigtext">Happy Valentine ❤️</h1>
+  <img id="photo"/>
+</div>
 
 <script>
-let userName="";
+let name="", photoData="";
 
-/* ---------- NEXT ---------- */
-function goNext(){
-  userName=nameInput.value.trim();
-
-  if(!userName){
-    alert("Enter name first!");
-    return;
-  }
-
-  document.body.classList.remove("professional");
-  document.body.classList.add("romantic");
-
-  page1.style.display="none";
-  page2.style.display="flex";
-
-  questionText.innerHTML =
-    userName + ", will you get your Valentine? ❤️";
+/* change screens */
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
+/* ---------- CAMERA ---------- */
+async function goCamera(){
+  name = document.getElementById("nameInput").value || "Friend";
+  show("camera");
 
-/* ---------- ONLY TELEPORT NO BUTTON ---------- */
-const noBtn=document.getElementById("noBtn");
-
-function teleport(){
-  const x=Math.random()*(window.innerWidth-120);
-  const y=Math.random()*(window.innerHeight-80);
-
-  noBtn.style.left=x+"px";
-  noBtn.style.top=y+"px";
+  const stream = await navigator.mediaDevices.getUserMedia({video:true});
+  document.getElementById("video").srcObject = stream;
 }
 
-/* only teleport, no shaking */
-noBtn.addEventListener("mouseover", teleport);
-noBtn.addEventListener("click", teleport);
+function takePhoto(){
+  const video = document.getElementById("video");
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
 
+  canvas.getContext("2d").drawImage(video,0,0);
+  photoData = canvas.toDataURL();
 
-/* ---------- YES CLICK ---------- */
-function yesClicked(){
+  document.getElementById("questionText").innerHTML =
+    `${name},<br>Will you be my Valentine? ❤️`;
 
-  page2.innerHTML =
-  "<h1>💖 Happy Valentine’s Day 💖</h1>" +
-  "<h2>"+userName+" you deserve all the love! ✨</h2>";
+  show("question");
+}
 
-  const colors=[
-    "#ff4d6d","#ff9a9e","#ffc3a0","#ff758c","#ffb6c1","#ff69b4"
-  ];
+/* ---------- NO TELEPORT ---------- */
+function moveNo(){
+  const btn = document.getElementById("no");
+  btn.style.left = Math.random()*80 + "vw";
+  btn.style.top  = Math.random()*80 + "vh";
+}
 
-  /* change background */
+/* ---------- YES CELEBRATION ---------- */
+function celebrate(){
+  show("celebrate");
+  document.getElementById("photo").src = photoData;
+
   setInterval(()=>{
-    document.body.style.background=
-      colors[Math.floor(Math.random()*colors.length)];
-  },500);
+    const heart = document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="🌸❤️";
+    heart.style.left=Math.random()*100+"vw";
+    document.body.appendChild(heart);
 
-  /* flowers + fireworks */
-  setInterval(()=>{
-    const item=document.createElement("div");
-    item.className="item";
-
-    const emojis=["🌸","🌹","💐","🎆","✨","❤️","🎉"];
-    item.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
-
-    item.style.left=Math.random()*100+"vw";
-    item.style.bottom="-20px";
-
-    document.body.appendChild(item);
-
-    setTimeout(()=>item.remove(),4000);
-  },120);
+    setTimeout(()=>heart.remove(),4000);
+  },150);
 }
-
 </script>
 
 </body>
 </html>
+
