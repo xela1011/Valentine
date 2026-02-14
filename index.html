@@ -1,74 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Valentine Checker</title>
+  <title>just enter your name ❤️</title>
 
   <style>
     *{
+      margin:0;
+      padding:0;
       box-sizing:border-box;
-      font-family: 'Segoe UI', sans-serif;
+      font-family:Segoe UI, Arial, sans-serif;
     }
 
     body{
-      margin:0;
       height:100vh;
+      overflow:hidden;
       display:flex;
       justify-content:center;
       align-items:center;
-      overflow:hidden;
-      transition:0.8s;
+      transition:1s;
     }
 
-    /* ----------- PAGE 1 (Professional look) ----------- */
+    /* ---------- PAGE 1 PROFESSIONAL ---------- */
     .professional{
-      background:linear-gradient(135deg,#1f2937,#374151);
+      background:linear-gradient(135deg,#0f172a,#1e293b);
       color:white;
     }
 
-    /* ----------- PAGE 2 (Romantic look) ----------- */
+    /* ---------- PAGE 2 ROMANTIC ---------- */
     .romantic{
       background:linear-gradient(135deg,#ff4d6d,#ff9a9e,#ffc3a0);
       color:white;
     }
 
-    .card{
-      background:white;
-      color:#333;
-      padding:50px;
-      border-radius:20px;
-      width:95%;
-      max-width:420px;
+    .screen{
+      width:100%;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
       text-align:center;
-      box-shadow:0 10px 30px rgba(0,0,0,0.3);
       position:relative;
-      z-index:5;
+    }
+
+    /* 🔥 BIG FULLSCREEN TEXT */
+    h1{
+      font-size:8vw;
+      margin-bottom:30px;
     }
 
     h2{
-      font-size:30px;
-      margin-bottom:25px;
+      font-size:6vw;
+      margin-bottom:40px;
     }
 
     input{
-      width:100%;
-      padding:14px;
-      font-size:18px;
-      border-radius:10px;
-      border:1px solid #ccc;
-      margin-bottom:20px;
+      font-size:5vw;
+      padding:15px;
+      width:70%;
+      max-width:400px;
+      border-radius:12px;
+      border:none;
+      text-align:center;
     }
 
     button{
-      padding:14px 28px;
-      font-size:18px;
+      font-size:5vw;
+      padding:14px 30px;
       border:none;
-      border-radius:12px;
+      border-radius:14px;
       cursor:pointer;
-      margin:10px;
+      margin:12px;
     }
 
     #nextBtn{
-      background:#2563eb;
+      background:#3b82f6;
       color:white;
     }
 
@@ -78,7 +84,7 @@
     }
 
     #noBtn{
-      background:#333;
+      background:#222;
       color:white;
       position:absolute;
     }
@@ -87,16 +93,16 @@
       display:none;
     }
 
-    /* floating items */
+    /* floating effects */
     .item{
       position:fixed;
-      font-size:22px;
+      font-size:28px;
       animation:rise 4s linear forwards;
     }
 
     @keyframes rise{
-      0%{transform:translateY(0); opacity:1;}
-      100%{transform:translateY(-120vh); opacity:0;}
+      from{transform:translateY(0);opacity:1;}
+      to{transform:translateY(-120vh);opacity:0;}
     }
 
   </style>
@@ -104,16 +110,16 @@
 
 <body class="professional">
 
-<!-- ---------------- PAGE 1 ---------------- -->
-<div class="card" id="page1">
-  <h2>Valentine Eligibility Check 💼</h2>
-  <input id="nameInput" placeholder="Enter your full name">
+<!-- PAGE 1 -->
+<div class="screen" id="page1">
+  <h1>just enter your name 💼</h1>
+  <input id="nameInput" placeholder="Enter your name">
+  <br>
   <button id="nextBtn" onclick="goNext()">Next</button>
 </div>
 
-
-<!-- ---------------- PAGE 2 ---------------- -->
-<div class="card" id="page2">
+<!-- PAGE 2 -->
+<div class="screen" id="page2">
   <h2 id="questionText"></h2>
   <button id="yesBtn" onclick="yesClicked()">YES ❤️</button>
   <button id="noBtn">NO 💔</button>
@@ -123,12 +129,12 @@
 <script>
 let userName="";
 
-/* ---------- NEXT BUTTON ---------- */
+/* ---------- NEXT ---------- */
 function goNext(){
   userName=nameInput.value.trim();
 
   if(!userName){
-    alert("Please enter your name first!");
+    alert("Enter name first!");
     return;
   }
 
@@ -136,49 +142,41 @@ function goNext(){
   document.body.classList.add("romantic");
 
   page1.style.display="none";
-  page2.style.display="block";
+  page2.style.display="flex";
 
   questionText.innerHTML =
     userName + ", will you get your Valentine? ❤️";
 }
 
 
-/* ---------- NO BUTTON TELEPORT ---------- */
+/* ---------- ONLY TELEPORT NO BUTTON ---------- */
 const noBtn=document.getElementById("noBtn");
 
 function teleport(){
-  const card=document.querySelector(".card");
-
-  const x=Math.random()*(card.clientWidth-120);
-  const y=Math.random()*(card.clientHeight-70);
+  const x=Math.random()*(window.innerWidth-120);
+  const y=Math.random()*(window.innerHeight-80);
 
   noBtn.style.left=x+"px";
   noBtn.style.top=y+"px";
 }
 
-/* teleport many times */
+/* only teleport, no shaking */
 noBtn.addEventListener("mouseover", teleport);
-
-noBtn.addEventListener("click", ()=>{
-  for(let i=0;i<12;i++){
-    setTimeout(teleport,i*70);
-  }
-});
+noBtn.addEventListener("click", teleport);
 
 
-/* ---------- YES CLICK ANIMATIONS ---------- */
+/* ---------- YES CLICK ---------- */
 function yesClicked(){
 
   page2.innerHTML =
-  "<h2>💖 Happy Valentine’s Day 💖</h2>" +
-  "<h2 style='font-size:24px'>" +
-  userName + ", you deserve all the love & happiness! ✨</h2>";
+  "<h1>💖 Happy Valentine’s Day 💖</h1>" +
+  "<h2>"+userName+" you deserve all the love! ✨</h2>";
 
-  /* change background colors repeatedly */
   const colors=[
     "#ff4d6d","#ff9a9e","#ffc3a0","#ff758c","#ffb6c1","#ff69b4"
   ];
 
+  /* change background */
   setInterval(()=>{
     document.body.style.background=
       colors[Math.floor(Math.random()*colors.length)];
