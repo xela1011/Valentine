@@ -1,69 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Valentine Surprise ❤️</title>
+  <title>Valentine Checker</title>
 
   <style>
+    *{
+      box-sizing:border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
     body{
       margin:0;
-      font-family: Arial, sans-serif;
-      overflow:hidden;
       height:100vh;
       display:flex;
       justify-content:center;
       align-items:center;
+      overflow:hidden;
+      transition:0.8s;
+    }
+
+    /* ----------- PAGE 1 (Professional look) ----------- */
+    .professional{
+      background:linear-gradient(135deg,#1f2937,#374151);
+      color:white;
+    }
+
+    /* ----------- PAGE 2 (Romantic look) ----------- */
+    .romantic{
       background:linear-gradient(135deg,#ff4d6d,#ff9a9e,#ffc3a0);
+      color:white;
     }
 
-    /* Floating hearts */
-    .heart{
-      position:fixed;
-      bottom:-20px;
-      animation:float 6s linear infinite;
-    }
-
-    @keyframes float{
-      from{transform:translateY(0)}
-      to{transform:translateY(-110vh)}
-    }
-
-    .box{
+    .card{
       background:white;
+      color:#333;
       padding:50px;
-      border-radius:25px;
-      text-align:center;
+      border-radius:20px;
       width:95%;
       max-width:420px;
+      text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,0.3);
       position:relative;
-      z-index:10;
-      box-shadow:0 10px 30px rgba(0,0,0,0.25);
+      z-index:5;
     }
 
-    /* 🔥 BIG TEXT */
     h2{
-      font-size:34px;
-      margin-bottom:20px;
-    }
-
-    h3{
-      font-size:26px;
+      font-size:30px;
+      margin-bottom:25px;
     }
 
     input{
-      padding:16px;
-      font-size:20px;
-      width:90%;
-      border-radius:12px;
+      width:100%;
+      padding:14px;
+      font-size:18px;
+      border-radius:10px;
+      border:1px solid #ccc;
+      margin-bottom:20px;
     }
 
-    /* 🔥 BIG BUTTONS */
     button{
-      padding:16px 32px;
-      font-size:20px;
+      padding:14px 28px;
+      font-size:18px;
       border:none;
-      border-radius:14px;
-      margin:12px;
+      border-radius:12px;
       cursor:pointer;
+      margin:10px;
+    }
+
+    #nextBtn{
+      background:#2563eb;
+      color:white;
     }
 
     #yesBtn{
@@ -77,113 +83,123 @@
       position:absolute;
     }
 
-    #question{
+    #page2{
       display:none;
     }
 
-    /* Fireworks */
-    .spark{
+    /* floating items */
+    .item{
       position:fixed;
       font-size:22px;
-      animation:boom 1s ease-out forwards;
+      animation:rise 4s linear forwards;
     }
 
-    @keyframes boom{
-      0%{opacity:1;transform:scale(1);}
-      100%{opacity:0;transform:translateY(-150px) scale(2);}
+    @keyframes rise{
+      0%{transform:translateY(0); opacity:1;}
+      100%{transform:translateY(-120vh); opacity:0;}
     }
+
   </style>
 </head>
 
-<body>
+<body class="professional">
 
-<div class="box">
-
-  <div id="nameBox">
-    <h2>Enter Your Name 💌</h2>
-    <input id="nameInput">
-    <br>
-    <button onclick="start()">Start</button>
-  </div>
-
-  <div id="question">
-    <h2 id="text"></h2>
-    <button id="yesBtn" onclick="yesClicked()">YES ❤️</button>
-    <button id="noBtn">NO 💔</button>
-  </div>
-
+<!-- ---------------- PAGE 1 ---------------- -->
+<div class="card" id="page1">
+  <h2>Valentine Eligibility Check 💼</h2>
+  <input id="nameInput" placeholder="Enter your full name">
+  <button id="nextBtn" onclick="goNext()">Next</button>
 </div>
+
+
+<!-- ---------------- PAGE 2 ---------------- -->
+<div class="card" id="page2">
+  <h2 id="questionText"></h2>
+  <button id="yesBtn" onclick="yesClicked()">YES ❤️</button>
+  <button id="noBtn">NO 💔</button>
+</div>
+
 
 <script>
 let userName="";
 
-/* Floating hearts background */
-setInterval(()=>{
-  const h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="❤️";
-  h.style.left=Math.random()*100+"vw";
-  h.style.fontSize=(18+Math.random()*25)+"px";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),6000);
-},300);
-
-
-/* Start */
-function start(){
-  userName=document.getElementById("nameInput").value;
+/* ---------- NEXT BUTTON ---------- */
+function goNext(){
+  userName=nameInput.value.trim();
 
   if(!userName){
-    alert("Enter name first!");
+    alert("Please enter your name first!");
     return;
   }
 
-  nameBox.style.display="none";
-  question.style.display="block";
+  document.body.classList.remove("professional");
+  document.body.classList.add("romantic");
 
-  text.innerHTML=userName+", will you get your Valentine? 💘";
+  page1.style.display="none";
+  page2.style.display="block";
+
+  questionText.innerHTML =
+    userName + ", will you get your Valentine? ❤️";
 }
 
 
-/* 🔥 YES → FIREWORKS */
-function yesClicked(){
-
-  for(let i=0;i<60;i++){
-    const s=document.createElement("div");
-    s.className="spark";
-    s.innerHTML=["💖","✨","🎆","🎉"][Math.floor(Math.random()*4)];
-    s.style.left=Math.random()*100+"vw";
-    s.style.top=Math.random()*100+"vh";
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(),1000);
-  }
-
-  document.querySelector(".box").innerHTML=
-  "<h2>💖 Happy Valentine’s Day 💖</h2>"+
-  "<h3>"+userName+" you will definitely get your Valentine! 😄</h3>";
-}
-
-
-/* 🔥 NO button keeps escaping MANY TIMES */
+/* ---------- NO BUTTON TELEPORT ---------- */
 const noBtn=document.getElementById("noBtn");
 
-function moveNo(){
-  const box=document.querySelector(".box");
-  const x=Math.random()*(box.clientWidth-120);
-  const y=Math.random()*(box.clientHeight-70);
+function teleport(){
+  const card=document.querySelector(".card");
+
+  const x=Math.random()*(card.clientWidth-120);
+  const y=Math.random()*(card.clientHeight-70);
+
   noBtn.style.left=x+"px";
   noBtn.style.top=y+"px";
 }
 
-/* move continuously */
-noBtn.addEventListener("click",()=>{
+/* teleport many times */
+noBtn.addEventListener("mouseover", teleport);
+
+noBtn.addEventListener("click", ()=>{
   for(let i=0;i<12;i++){
-    setTimeout(moveNo,i*70);
+    setTimeout(teleport,i*70);
   }
 });
 
-/* also move when mouse near */
-noBtn.addEventListener("mouseover",moveNo);
+
+/* ---------- YES CLICK ANIMATIONS ---------- */
+function yesClicked(){
+
+  page2.innerHTML =
+  "<h2>💖 Happy Valentine’s Day 💖</h2>" +
+  "<h2 style='font-size:24px'>" +
+  userName + ", you deserve all the love & happiness! ✨</h2>";
+
+  /* change background colors repeatedly */
+  const colors=[
+    "#ff4d6d","#ff9a9e","#ffc3a0","#ff758c","#ffb6c1","#ff69b4"
+  ];
+
+  setInterval(()=>{
+    document.body.style.background=
+      colors[Math.floor(Math.random()*colors.length)];
+  },500);
+
+  /* flowers + fireworks */
+  setInterval(()=>{
+    const item=document.createElement("div");
+    item.className="item";
+
+    const emojis=["🌸","🌹","💐","🎆","✨","❤️","🎉"];
+    item.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+
+    item.style.left=Math.random()*100+"vw";
+    item.style.bottom="-20px";
+
+    document.body.appendChild(item);
+
+    setTimeout(()=>item.remove(),4000);
+  },120);
+}
 
 </script>
 
