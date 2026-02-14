@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Just enter your name</title>
+<title>just enter your name</title>
 
 <style>
 *{
@@ -13,52 +13,65 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* ---------- BODY ---------- */
 body{
   height:100vh;
+  overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:hidden;
   text-align:center;
   color:white;
-  transition:0.8s;
+  transition:1s;
 }
 
 /* ---------- SCREENS ---------- */
 .screen{
-  display:none;
+  position:absolute;
   width:100%;
   height:100%;
+  display:none;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
   padding:20px;
 }
 
-.active{ display:flex; }
-
-/* ---------- PROFESSIONAL PAGE ---------- */
-#start{
-  background: linear-gradient(135deg,#1e3c72,#2a5298);
+.active{
+  display:flex;
 }
 
+/* ---------- BIG TEXT ---------- */
+.bigtext{
+  font-size:8vw;
+  font-weight:bold;
+  line-height:1.3;
+}
+
+/* ---------- INPUT ---------- */
 input{
-  padding:18px;
+  padding:20px;
   font-size:24px;
   border-radius:12px;
   border:none;
-  width:70%;
+  margin:30px;
+  width:75%;
   max-width:350px;
-  margin:20px;
 }
 
+/* ---------- BUTTONS ---------- */
 button{
   padding:18px 40px;
   font-size:24px;
-  border:none;
   border-radius:14px;
+  border:none;
   cursor:pointer;
-  margin:15px;
+  margin:20px;
+}
+
+/* ---------- PAGE 1 ---------- */
+#start{
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
 }
 
 /* ---------- CAMERA ---------- */
@@ -66,21 +79,9 @@ button{
   background:#111;
 }
 
-video{
-  width:90%;
-  max-width:420px;
-  border-radius:20px;
-}
-
-/* ---------- VALENTINE PAGE ---------- */
+/* ---------- QUESTION ---------- */
 #question{
   background:linear-gradient(135deg,#ff6a88,#ff99ac);
-}
-
-.bigtext{
-  font-size:8vw;
-  font-weight:bold;
-  line-height:1.3;
 }
 
 #yes{
@@ -94,13 +95,12 @@ video{
   position:absolute;
 }
 
-/* ---------- CELEBRATION ---------- */
+/* ---------- CELEBRATE ---------- */
 #celebrate{
-  background:#ff4e50;
-  animation:colorChange 6s infinite;
+  animation:bgChange 8s infinite;
 }
 
-@keyframes colorChange{
+@keyframes bgChange{
   0%{background:#ff4e50;}
   25%{background:#ff6a88;}
   50%{background:#ff9966;}
@@ -111,13 +111,14 @@ video{
 #photo{
   width:250px;
   border-radius:20px;
-  margin:20px;
+  margin-top:25px;
+  box-shadow:0 0 20px rgba(0,0,0,0.4);
 }
 
-/* flowers/fireworks */
+/* ---------- FLOATING HEARTS ---------- */
 .heart{
   position:absolute;
-  font-size:30px;
+  font-size:28px;
   animation:float 4s linear infinite;
 }
 
@@ -130,84 +131,99 @@ video{
 
 <body>
 
-<!-- -------- PAGE 1 -------- -->
+<!-- ---------- PAGE 1 ---------- -->
 <div id="start" class="screen active">
-  <h1 class="bigtext">Enter Your Name</h1>
+  <h1 class="bigtext">Just Enter Your Name</h1>
   <input id="nameInput" placeholder="Your name"/>
   <button onclick="goCamera()">Next ➜</button>
 </div>
 
-<!-- -------- PAGE 2 CAMERA -------- -->
+<!-- ---------- PAGE 2 (AUTO CAMERA) ---------- -->
 <div id="camera" class="screen">
-  <video id="video" autoplay></video>
-  <button onclick="takePhoto()">Take Photo 📸</button>
+  <h1 class="bigtext">Capturing Photo 📸</h1>
 </div>
 
-<!-- -------- PAGE 3 QUESTION -------- -->
+<!-- ---------- PAGE 3 ---------- -->
 <div id="question" class="screen">
   <h1 id="questionText" class="bigtext"></h1>
-  <div style="margin-top:40px;">
+  <div>
     <button id="yes" onclick="celebrate()">YES ❤️</button>
     <button id="no" onclick="moveNo()">NO</button>
   </div>
 </div>
 
-<!-- -------- PAGE 4 CELEBRATE -------- -->
+<!-- ---------- PAGE 4 ---------- -->
 <div id="celebrate" class="screen">
-  <h1 class="bigtext">Happy Valentine ❤️</h1>
+  <h1 id="finalText" class="bigtext"></h1>
   <img id="photo"/>
 </div>
 
-<script>
-let name="", photoData="";
 
-/* change screens */
+<script>
+let name="";
+let photoData="";
+
+/* ---------- SCREEN SWITCH ---------- */
 function show(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-/* ---------- CAMERA ---------- */
+/* ---------- AUTO CAMERA CAPTURE ---------- */
 async function goCamera(){
   name = document.getElementById("nameInput").value || "Friend";
   show("camera");
 
-  const stream = await navigator.mediaDevices.getUserMedia({video:true});
-  document.getElementById("video").srcObject = stream;
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({video:true});
+    const video = document.createElement("video");
+    video.srcObject = stream;
+    await video.play();
+
+    setTimeout(()=>{
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      canvas.getContext("2d").drawImage(video,0,0);
+      photoData = canvas.toDataURL();
+
+      stream.getTracks().forEach(track => track.stop());
+
+      document.getElementById("questionText").innerHTML =
+  `${name},<br>Will you be my Valentine? ❤️`;
+
+      show("question");
+
+    },1000);
+
+  }catch(e){
+    alert("Camera permission required!");
+    show("start");
+  }
 }
 
-function takePhoto(){
-  const video = document.getElementById("video");
-  const canvas = document.createElement("canvas");
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-
-  canvas.getContext("2d").drawImage(video,0,0);
-  photoData = canvas.toDataURL();
-
-  document.getElementById("questionText").innerHTML =
-    `${name},<br>Will you be my Valentine? ❤️`;
-
-  show("question");
-}
-
-/* ---------- NO TELEPORT ---------- */
+/* ---------- NO BUTTON TELEPORT ---------- */
 function moveNo(){
   const btn = document.getElementById("no");
-  btn.style.left = Math.random()*80 + "vw";
-  btn.style.top  = Math.random()*80 + "vh";
+  btn.style.left = Math.random()*85 + "vw";
+  btn.style.top  = Math.random()*85 + "vh";
 }
 
 /* ---------- YES CELEBRATION ---------- */
 function celebrate(){
   show("celebrate");
-  document.getElementById("photo").src = photoData;
 
+  document.getElementById("photo").src = photoData;
+  document.getElementById("finalText").innerHTML =
+    `Happy Valentine ${name}! ❤️`;
+
+  /* hearts + flowers */
   setInterval(()=>{
     const heart = document.createElement("div");
     heart.className="heart";
-    heart.innerHTML="🌸❤️";
-    heart.style.left=Math.random()*100+"vw";
+    heart.innerHTML = ["❤️","🌸","💖","💐","✨"][Math.floor(Math.random()*5)];
+    heart.style.left = Math.random()*100+"vw";
     document.body.appendChild(heart);
 
     setTimeout(()=>heart.remove(),4000);
